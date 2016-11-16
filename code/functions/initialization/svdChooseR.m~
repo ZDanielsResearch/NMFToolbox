@@ -1,0 +1,28 @@
+function r = svdChooseR(A)
+%%Paper:
+% New SVD based initialization strategy for non-negative matrix factorization
+% H. Qiao
+%Inputs:
+% A: Data matrix: n x m
+%Outputs
+% r: Estimated rank of A
+
+[~,S,~] = svd(A);
+
+keyboard;
+
+s = diag(S);
+sumTot = sum(s);
+
+r = 0;
+
+while true
+    r = r + 1;
+    sumR = sum(s(1:r));
+    sumRplus1 = sum(s(1:r+1));
+    if (sumR ./ sumTot) < 0.9 && (sumRplus1 ./ sumTot) >= 0.9
+        break;
+    end
+end
+
+end
