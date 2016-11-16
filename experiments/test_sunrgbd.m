@@ -27,4 +27,15 @@ data = data';
 
 clear objectList;
 
-[W,H,D] = nmft(data,numBasisElements,'als',maxIters,'random');
+params = [];
+params.method = 'mult';
+params.maxIters = 100;
+params.initialization = 'nndsvd';
+params.loss = 'kldivergence';
+params.evalLoss = 'sqeuclidean';
+params.paramH = 0.5;
+params.paramW = 0.5;
+params.sparseParamH = 0.75;
+params.sparseParamW = 0.75;
+
+[W,H,D] = nmft(data,numBasisElements,params);
