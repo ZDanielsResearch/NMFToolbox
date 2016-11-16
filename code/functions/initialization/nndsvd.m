@@ -25,6 +25,8 @@ if k > n || k > m
     error('Number of basis elements is larger than the number of rows or columns in data matrix.');
 end
 
+k = k + 1;
+
 [U, S, V] = svds(A, k);
 W = zeros(n,k);
 H = zeros(k,m);
@@ -32,8 +34,7 @@ H = zeros(k,m);
 W(:,1) = sqrt(S(1,1)).*U(:,1);
 H(1,:) = sqrt(S(1,1)).*V(:,1)';
 
-for i = 2:1:k+1
-    %FIX THIS
+for i = 2:1:k
     x = U(:,i);
     y = V(:,i);
     xp = x .* (x >= 0); 

@@ -49,7 +49,7 @@ switch initialization
     case 'nndsvd'
         [W,H] = nndsvd(A,k);
     case 'svdnmf'
-        [W,H] = nmfsvd(A,k);
+        [W,H] = svdnmf(A,k);
     otherwise
         error('Initialization is not valid.');
 end

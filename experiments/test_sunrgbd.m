@@ -27,4 +27,4 @@ data = data';
 
 clear objectList;
 
-% [W,H,D] = nmft(data,numBasisElements,'als',maxIters,'random');
+[W,H,D] = nmft(data,numBasisElements,'als',maxIters,'random');
