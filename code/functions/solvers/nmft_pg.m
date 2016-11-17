@@ -9,19 +9,28 @@ function [W,H] = nmft_pg(A,W,H,params)
 % k: Number of basis elements
 % params.maxIters: Maximum number of iterations to perform
 % params.loss: Type of divergence to use: {'sqeuclidean','kldivergence','itakura-saito','alpha','beta'}
-% params.stepType: How to compute step: {'steepest','newton','conjugate'}
+% params.stepType: How to compute step: {'steepest','newton'}
+% params.armijoBeta: Beta for Armijos Rule: [0,1]
+% params.armijoSigma: Sigma for Armijos Rule: [0,1]
 %Outputs
 % W: Basis matrix: n x k
 % H: Coefficient matrix: k x m
 
+if ~isempty(params.loss)
+    params.loss = lower(params.loss);
+    if ~strcmp(params.loss,'sqeuclidean')
+        error('Loss must be squared Euclidean for projected gradient descent.');
+    end
+end
+
+params.loss = lower(params.loss);
+
 if isempty(params.stepType)
     params.stepType = 'steepest';
-    disp('Warning: No step type specified: Using optimal steepest descent.');
+    disp('Warning: No step type specified: Using optimal steepest descent for sqeuclidean, Armijos rule otherwise.');
 end
 
 params.stepType = lower(params.stepType);
-
-iterationNumber = 1;
 
 for iterationNumber = 1:1:params.maxIters
     switch params.stepType
@@ -39,11 +48,9 @@ for iterationNumber = 1:1:params.maxIters
             [~,~,dW,~,~,~,alphaW] = sqeuclidean_loss(A,W,H,[0 1],[0 1]);
             W = W - dW * inv(alphaW);
             W = W .* (W > 0);
-        case 'conjugate'
-            
         otherwise
             error('Step type is not valid.')
     end
-    [F,~,~,~,~,~,~] = sqeuclidean_loss(A,W,H,[0 0],[0 0]);
-    disp(F);
+end
+
 end
