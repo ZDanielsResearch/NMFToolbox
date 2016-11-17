@@ -25,17 +25,14 @@ iterationNumber = 1;
 
 switch params.loss
     case 'sqeuclidean'
-        while iterationNumber <= params.maxIters;
+        for iterationNumber = 1:1:params.maxIters;
             H = H.*((W'*A)./(W'*W*H + 1e-8));
             W = W.*((A*H')./(W*H*H'  + 1e-8));
-            iterationNumber = iterationNumber + 1;
         end
     case 'kldivergence'
-        while iterationNumber <= params.maxIters;
+        for iterationNumber = 1:1:params.maxIters;
             H = H.*(W'*(A./(W*H + 1e-8)))./(W'*ones(n,m));
             W = W.*((A./(W*H + 1e-8))*H')./(ones(n,m)*H');
-            [D,~,~] = kl_loss(A,W,H,[0 0])
-            iterationNumber = iterationNumber + 1;
         end
     otherwise
         error('Loss is not valid or incompatible with chosen method.');

@@ -18,14 +18,11 @@ if ~isempty(params.loss)
     end
 end
 
-iterationNumber = 1;
-
-while iterationNumber <= params.maxIters
+for iterationNumber = 1:1:params.maxIters
     H = inv(W'*W)*W'*A;
     H = H .* (H >= 0);
     W = A*H'*inv(H*H');
     W = W .* (W >= 0);
-    iterationNumber = iterationNumber + 1;
 end
 
 end

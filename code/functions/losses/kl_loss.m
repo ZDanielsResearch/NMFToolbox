@@ -10,17 +10,24 @@ function [F,dW,dH] = kl_loss(A,W,H,computeDF)
 % F: Loss value
 % dF: Gradient of loss
 
+[n,k] = size(W);
+[~,m] = size(H);
+
 R = W*H;
-F = sum(sum(A.*log(A ./ (R + 1e-8)) - A +  R));
+F = sum(sum(A.*log(A ./ (R + 1e-8))) + log(sum(sum(R)) + 1e-8));
 dH = [];
 dW = [];
 
-% if computeDF(1) == 1
-%     dH = 2.*W'*(W*H - A);
-% end
-% 
-% if computeDF(2) == 1
-%     dW = 2.*(W*H - A)*H';
-% end
+if computeDF(1) || computeDF(2)
+    Z = (A./R);
+end
+
+if computeDF(1)
+    dH = -W'*Z + W'*ones(n,m);
+end
+
+if computeDF(2)
+    dW = -Z*H' + ones(n,m)*H';
+end
 
 end

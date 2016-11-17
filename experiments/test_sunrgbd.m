@@ -28,11 +28,12 @@ data = data';
 clear objectList;
 
 params = [];
-params.method = 'mult';
+params.method = 'projgrad';
 params.maxIters = 100;
 params.initialization = 'nndsvd';
-params.loss = 'kldivergence';
+params.loss = 'sqeuclidean';
 params.evalLoss = 'sqeuclidean';
+params.stepType = 'newton';
 params.paramH = 0.5;
 params.paramW = 0.5;
 params.sparseParamH = 0.75;

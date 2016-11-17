@@ -45,17 +45,14 @@ end
 [n,k] = size(W);
 [~,m] = size(H);
 
-iterationNumber = 1;
-
 betaH = ((1 - params.sparseParamH).*sqrt(k) + params.sparseParamH).^2;
 betaW = ((1 - params.sparseParamW).*sqrt(k) + params.sparseParamW).^2;
 
-while iterationNumber <= params.maxIters
+for iterationNumber=1:1:params.maxIters
     H = inv(W'*W + params.paramH .* betaH .* eye(size(k,k)) - params.paramH .* ones(size(k,k)))*W'*A;
     H = H .* (H >= 0);
     W = A*H'*inv(H*H' + params.paramW .* betaW .* eye(k,k) - params.paramW .* ones(size(k,k)));
     W = W .* (W >= 0);
-    iterationNumber = iterationNumber + 1;
 end
 
 end
