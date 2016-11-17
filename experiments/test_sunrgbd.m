@@ -28,17 +28,15 @@ data = data';
 clear objectList;
 
 params = [];
-params.method = 'projgrad';
+params.method = 'als';
 params.maxIters = 100;
 params.initialization = 'nndsvd';
-params.loss = 'kldivergence';
-params.evalLoss = 'kldivergence';
-params.stepType = 'steepest';
+params.loss = 'sqeuclidean';
+params.evalLoss = 'sqeuclidean';
+params.stepType = 'newton';
 params.paramH = 0.5;
 params.paramW = 0.5;
 params.sparseParamH = 0.75;
 params.sparseParamW = 0.75;
-params.armijoBeta = 0.5;
-params.armijoSigma = 0;
 
 [W,H,D] = nmft(data,numBasisElements,params);

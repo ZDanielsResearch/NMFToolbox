@@ -7,13 +7,11 @@ function [W,H,D] = nmft(A,k,params)
 % params.initialization: How to initialize W and H: {'nndsvd','random','kmeans','svdnmf'}
 % params.loss: Type of divergence to use for training: {'sqeuclidean','kldivergence','itakura-saito','alpha','beta'}
 % params.evalLoss: Type of divergence to use for evaluation: {'sqeuclidean','kldivergence','itakura-saito','alpha','beta'}
-% params.stepType: How to compute step: {'steepest','newton'}
+% params.stepType: How to compute step: {'steepest','newton','lbfgs'}
 % params.paramH: parameter associated with H: Differs from algorithm to algorithm
 % params.paramW: parameter associated with W: Differs from algorithm to algorithm
 % params.sparseParamH: parameter for Hoyer sparsity associated with H
 % params.sparseParamW: parameter for Hoyer sparsity associated with W
-% params.armijoBeta: Beta for Armijos Rule: [0,1]
-% params.armijoSigma: Sigma for Armijos Rule: [0,1]
 %Outputs
 % W: Basis matrix: n x k
 % H: Coefficient matrix: k x m

@@ -23,6 +23,7 @@ for iterationNumber = 1:1:params.maxIters
     H = H .* (H >= 0);
     W = A*H'*inv(H*H');
     W = W .* (W >= 0);
+    [F,~,~,~,~,~,~] = sqeuclidean_loss(A,W,H,[0 0],[0 0])
 end
 
 end
