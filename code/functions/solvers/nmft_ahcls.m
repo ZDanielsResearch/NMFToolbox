@@ -6,7 +6,6 @@ function [W,H] = nmft_ahcls(A,W,H,params)
 % A: Data matrix: n x m
 % k: Number of basis elements
 % params.maxIters: Maximum number of iterations to perform
-% params.loss: Type of divergence to use: {'sqeuclidean','kldivergence','itakura-saito','alpha','beta'}
 % params.paramH: mixing coefficient associated with H
 % params.paramW: mixing coefficient associated with W
 % params.sparseParamH: parameter for Hoyer sparsity associated with H

@@ -2,12 +2,12 @@ function [W,H,D] = nmft(A,k,params)
 %%Inputs:
 % A: Data matrix: n x m
 % k: Number of basis elements
-% params.method: Solver to use: {'als','acls','ahcls','mult','projgrad'}
+% params.method: Solver to use: {'als','acls','ahcls','gdcls','mult','projgrad'}
 % params.maxIters: Maximum number of iterations to perform
 % params.initialization: How to initialize W and H: {'nndsvd','random','kmeans','svdnmf'}
 % params.loss: Type of divergence to use for training: {'sqeuclidean','kldivergence','itakura-saito','alpha','beta'}
 % params.evalLoss: Type of divergence to use for evaluation: {'sqeuclidean','kldivergence','itakura-saito','alpha','beta'}
-% params.stepType: How to compute step: {'steepest','newton','lbfgs'}
+% params.stepType: How to compute step: {'steepest','newton','bfgs'}
 % params.paramH: parameter associated with H: Differs from algorithm to algorithm
 % params.paramW: parameter associated with W: Differs from algorithm to algorithm
 % params.sparseParamH: parameter for Hoyer sparsity associated with H
@@ -90,6 +90,8 @@ switch params.method
         [W,H] = nmft_acls(A,W,H,params);
     case 'ahcls'
         [W,H] = nmft_ahcls(A,W,H,params);
+    case 'gdcls'
+        [W,H] = nmft_gdcls(A,W,H,params);
     case 'mult'
         [W,H] = nmft_mult(A,W,H,params);
     case 'projgrad'
