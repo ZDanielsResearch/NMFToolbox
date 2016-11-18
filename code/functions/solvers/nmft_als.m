@@ -6,7 +6,6 @@ function [W,H] = nmft_als(A,W,H,params)
 % A: Data matrix: n x m
 % k: Number of basis elements
 % params.maxIters: Maximum number of iterations to perform
-% params.loss: Type of divergence to use: {'sqeuclidean','kldivergence','itakura-saito','alpha','beta'}
 %Outputs
 % W: Basis matrix: n x k
 % H: Coefficient matrix: k x m
@@ -23,7 +22,16 @@ for iterationNumber = 1:1:params.maxIters
     H = H .* (H >= 0);
     W = A*H'*inv(H*H');
     W = W .* (W >= 0);
-    [F,~,~,~,~,~,~] = sqeuclidean_loss(A,W,H,[0 0],[0 0])
+    if params.printIter
+        F = 0;
+        if strcmp(params.evalLoss,'sqeuclidean')
+            [F,~,~,~,~,~,~] = sqeuclidean_loss(A,W,H,[0 0],[0 0]);
+        end
+        if strcmp(params.evalLoss,'kldivergence')
+            F = kl_loss(A,W,H);
+        end
+        disp(['Iteration #' num2str(iterationNumber) ', Function Value: ' num2str(F)]);
+    end
 end
 
 end

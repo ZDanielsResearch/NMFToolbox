@@ -53,6 +53,16 @@ for iterationNumber=1:1:params.maxIters
     H = H .* (H >= 0);
     W = A*H'*inv(H*H' + params.paramW .* betaW .* eye(k,k) - params.paramW .* ones(size(k,k)));
     W = W .* (W >= 0);
+    if params.printIter
+        F = 0;
+        if strcmp(params.evalLoss,'sqeuclidean')
+            [F,~,~,~,~,~,~] = sqeuclidean_loss(A,W,H,[0 0],[0 0]);
+        end
+        if strcmp(params.evalLoss,'kldivergence')
+            F = kl_loss(A,W,H);
+        end
+        disp(['Iteration #' num2str(iterationNumber) ', Function Value: ' num2str(F)]);
+    end
 end
 
 end

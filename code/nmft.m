@@ -12,6 +12,8 @@ function [W,H,D] = nmft(A,k,params)
 % params.paramW: parameter associated with W: Differs from algorithm to algorithm
 % params.sparseParamH: parameter for Hoyer sparsity associated with H
 % params.sparseParamW: parameter for Hoyer sparsity associated with W
+% params.subIters: Number of subiterations to perform
+% params.printIter: Flag to print function value after each iteration: {true,false}
 %Outputs
 % W: Basis matrix: n x k
 % H: Coefficient matrix: k x m
@@ -45,6 +47,22 @@ if isempty(params.initialization)
     params.initialization = 'nndsvd';
     disp('Warning: No initialization method specified: Using NNDSVD.');
 end
+
+if isempty(params.printIter)
+    params.printIter = false;
+end
+
+if isempty(params.evalLoss)
+    if isempty(params.loss)
+        params.evalLoss = 'sqeuclidean';
+        disp('Warning: No evaluation or training loss specified: Using squared euclidean loss for evaluation.');
+    else
+        params.evalLoss = params.loss;
+        disp('Warning: No evaluation loss specified: Using training loss for evaluation.');
+    end
+end
+
+params.evalLoss = lower(params.evalLoss);
 
 W = [];
 H = [];
@@ -82,17 +100,6 @@ end
 
 D = 0;
 
-if isempty(params.evalLoss)
-    if isempty(params.loss)
-        params.evalLoss = 'sqeuclidean';
-        disp('Warning: No evaluation or training loss specified: Using squared euclidean loss for evaluation.');
-    else
-        params.evalLoss = params.loss;
-        disp('Warning: No evaluation loss specified: Using training loss for evaluation.');
-    end
-end
-
-params.evalLoss = lower(params.evalLoss);
 switch params.evalLoss
     case 'sqeuclidean'
         [D,~,~,~,~,~,~] = sqeuclidean_loss(A,W,H,[0 0],[0 0]);
