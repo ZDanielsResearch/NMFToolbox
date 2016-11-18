@@ -28,7 +28,7 @@ data = data';
 clear objectList;
 
 params = [];
-params.method = 'orthoChoi';
+params.method = 'convex';
 params.maxIters = 100;
 params.initialization = 'nndsvd';
 params.loss = 'sqeuclidean';
@@ -42,4 +42,4 @@ params.subIters = 1;
 params.printIter = true;
 params.orthogonalConstraint = 'w';
 
-[W,H,D] = nmft(data,numBasisElements,params);
+[W,H,D,F] = nmft(data,numBasisElements,params);

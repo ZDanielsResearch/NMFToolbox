@@ -1,8 +1,8 @@
-function [W,H,D] = nmft(A,k,params)
+function [W,H,D,F] = nmft(A,k,params)
 %%Inputs:
 % A: Data matrix: n x m
 % k: Number of basis elements
-% params.method: Solver to use: {'als','acls','ahcls','gdcls','mult','projgrad','nnsc','hoyer','orthoChoi','orthoDTPP'}
+% params.method: Solver to use: {'als','acls','ahcls','gdcls','mult','projgrad','nnsc','hoyer','orthoChoi','orthoDTPP','convex'}
 % params.maxIters: Maximum number of iterations to perform
 % params.initialization: How to initialize W and H: {'nndsvd','random','kmeans','svdnmf'}
 % params.loss: Type of divergence to use for training: {'sqeuclidean','kldivergence','itakura-saito','alpha','beta'}
@@ -105,6 +105,8 @@ switch params.method
         [W,H] = nmft_orthogonal_choi(A,W,H,params);
     case 'orthodtpp'
         [W,H] = nmft_orthogonal_dtpp(A,W,H,params);
+    case 'convex'
+        [W,H,F] = nmft_convex(A,W,H,params);
     otherwise
         error('Method is not valid.');
 end
