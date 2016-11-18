@@ -2,7 +2,7 @@ function [W,H,D] = nmft(A,k,params)
 %%Inputs:
 % A: Data matrix: n x m
 % k: Number of basis elements
-% params.method: Solver to use: {'als','acls','ahcls','gdcls','mult','projgrad','nnsc'}
+% params.method: Solver to use: {'als','acls','ahcls','gdcls','mult','projgrad','nnsc','hoyer'}
 % params.maxIters: Maximum number of iterations to perform
 % params.initialization: How to initialize W and H: {'nndsvd','random','kmeans','svdnmf'}
 % params.loss: Type of divergence to use for training: {'sqeuclidean','kldivergence','itakura-saito','alpha','beta'}
@@ -73,11 +73,11 @@ switch params.initialization
         W = abs(rand(n,k));
         H = abs(rand(k,m));
     case 'kmeans'
-        [W,H] = kmeansinit(A,k); 
+        [W,H] = kmeans_init(A,k); 
     case 'nndsvd'
-        [W,H] = nndsvd(A,k);
+        [W,H] = nndsvd_init(A,k);
     case 'svdnmf'
-        [W,H] = svdnmf(A,k);
+        [W,H] = svdnmf_init(A,k);
     otherwise
         error('Initialization is not valid.');
 end
@@ -98,6 +98,8 @@ switch params.method
         [W,H] = nmft_pg(A,W,H,params);
     case 'nnsc'
         [W,H] = nmft_nnsc(A,W,H,params);
+    case 'hoyer'
+        [W,H] = nmft_hoyer(A,W,H,params);
     otherwise
         error('Method is not valid.');
 end

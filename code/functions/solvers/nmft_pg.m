@@ -21,7 +21,6 @@ if ~isempty(params.loss)
         error('Loss must be squared Euclidean for projected gradient descent.');
     end
 end
-
 params.loss = lower(params.loss);
 
 if isempty(params.stepType)

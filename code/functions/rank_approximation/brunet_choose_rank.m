@@ -1,4 +1,4 @@
-function r = brunetChooseR(A,params,range,stepSize)
+function r = brunet_choose_rank(A,params,range,stepSize)
 %%Paper:
 % Metagenes and molecular pattern discovery using matrix factorization
 % J. Brunet, P. Tamayo, T. Golub, and J. Mesirov

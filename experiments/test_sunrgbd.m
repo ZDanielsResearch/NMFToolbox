@@ -28,7 +28,7 @@ data = data';
 clear objectList;
 
 params = [];
-params.method = 'nnsc';
+params.method = 'hoyer';
 params.maxIters = 100;
 params.initialization = 'nndsvd';
 params.loss = 'sqeuclidean';

@@ -1,4 +1,4 @@
-function r = crossvalChooseR(A,method,range,stepSize)
+function r = crossval_choose_rank(A,method,range,stepSize)
 %%Inputs:
 % A: Data matrix: n x m
 % method: Solver to use: {}

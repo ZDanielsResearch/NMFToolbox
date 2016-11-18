@@ -1,4 +1,4 @@
-function [W,H] = svdnmf(A,k)
+function [W,H] = svdnmf_init(A,k)
 %%Paper:
 % New SVD based initialization strategy for non-negative matrix factorization
 % H. Qiao

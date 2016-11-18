@@ -1,4 +1,4 @@
-function [W,H] = nndsvd(A,k)
+function [W,H] = nndsvd_init(A,k)
 %%Paper:
 % SVD based initialization: A head start for nonnegative matrix factorization
 % C. Boutsidis and E. Gallopoulos

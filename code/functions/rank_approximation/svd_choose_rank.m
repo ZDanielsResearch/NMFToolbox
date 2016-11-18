@@ -1,4 +1,4 @@
-function r = svdChooseR(A,p)
+function r = svd_choose_rank(A,p)
 %%Paper:
 % New SVD based initialization strategy for non-negative matrix factorization
 % H. Qiao

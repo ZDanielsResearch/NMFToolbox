@@ -1,4 +1,4 @@
-function r = hutchinsChooseR(A,method,range,stepSize)
+function r = hutchins_choose_rank(A,method,range,stepSize)
 %%Paper: 
 % Position-dependent motif characterization using non-negative matrix factorization
 % L. Hutchins, S. Murphy, P. Singh, J. Graber

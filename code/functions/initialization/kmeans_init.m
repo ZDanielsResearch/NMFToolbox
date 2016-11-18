@@ -1,4 +1,4 @@
-function [W,H] = kmeansinit(A,k)
+function [W,H] = kmeans_init(A,k)
 %%Paper:
 % Concept Decompositions for Large Sparse Text Data using Clustering
 % I. Dhillon and D. Modha
