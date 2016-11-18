@@ -21,8 +21,6 @@ end
 
 params.loss = lower(params.loss);
 
-iterationNumber = 1;
-
 for iterationNumber = 1:1:params.maxIters;
     switch params.loss
         case 'sqeuclidean'

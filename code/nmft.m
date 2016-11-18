@@ -2,7 +2,7 @@ function [W,H,D] = nmft(A,k,params)
 %%Inputs:
 % A: Data matrix: n x m
 % k: Number of basis elements
-% params.method: Solver to use: {'als','acls','ahcls','gdcls','mult','projgrad','nnsc','hoyer'}
+% params.method: Solver to use: {'als','acls','ahcls','gdcls','mult','projgrad','nnsc','hoyer','orthoChoi','orthoDTPP'}
 % params.maxIters: Maximum number of iterations to perform
 % params.initialization: How to initialize W and H: {'nndsvd','random','kmeans','svdnmf'}
 % params.loss: Type of divergence to use for training: {'sqeuclidean','kldivergence','itakura-saito','alpha','beta'}
@@ -12,6 +12,7 @@ function [W,H,D] = nmft(A,k,params)
 % params.paramW: parameter associated with W: Differs from algorithm to algorithm
 % params.sparseParamH: parameter for Hoyer sparsity associated with H
 % params.sparseParamW: parameter for Hoyer sparsity associated with W
+% params.orthogonalConstraint: Enforce orthogonality in {'w','h'} for Choi algorithm
 % params.subIters: Number of subiterations to perform
 % params.printIter: Flag to print function value after each iteration: {true,false}
 %Outputs
@@ -100,6 +101,10 @@ switch params.method
         [W,H] = nmft_nnsc(A,W,H,params);
     case 'hoyer'
         [W,H] = nmft_hoyer(A,W,H,params);
+    case 'orthochoi'
+        [W,H] = nmft_orthogonal_choi(A,W,H,params);
+    case 'orthodtpp'
+        [W,H] = nmft_orthogonal_dtpp(A,W,H,params);
     otherwise
         error('Method is not valid.');
 end

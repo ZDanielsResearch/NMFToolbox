@@ -28,7 +28,7 @@ data = data';
 clear objectList;
 
 params = [];
-params.method = 'hoyer';
+params.method = 'orthoChoi';
 params.maxIters = 100;
 params.initialization = 'nndsvd';
 params.loss = 'sqeuclidean';
@@ -40,5 +40,6 @@ params.sparseParamH = 0.75;
 params.sparseParamW = 0.75;
 params.subIters = 1;
 params.printIter = true;
+params.orthogonalConstraint = 'w';
 
 [W,H,D] = nmft(data,numBasisElements,params);
