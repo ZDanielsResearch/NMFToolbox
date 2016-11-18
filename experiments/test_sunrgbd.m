@@ -28,7 +28,7 @@ data = data';
 clear objectList;
 
 params = [];
-params.method = 'gdcls';
+params.method = 'nnsc';
 params.maxIters = 100;
 params.initialization = 'nndsvd';
 params.loss = 'sqeuclidean';

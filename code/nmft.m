@@ -2,7 +2,7 @@ function [W,H,D] = nmft(A,k,params)
 %%Inputs:
 % A: Data matrix: n x m
 % k: Number of basis elements
-% params.method: Solver to use: {'als','acls','ahcls','gdcls','mult','projgrad'}
+% params.method: Solver to use: {'als','acls','ahcls','gdcls','mult','projgrad','nnsc'}
 % params.maxIters: Maximum number of iterations to perform
 % params.initialization: How to initialize W and H: {'nndsvd','random','kmeans','svdnmf'}
 % params.loss: Type of divergence to use for training: {'sqeuclidean','kldivergence','itakura-saito','alpha','beta'}
@@ -96,6 +96,8 @@ switch params.method
         [W,H] = nmft_mult(A,W,H,params);
     case 'projgrad'
         [W,H] = nmft_pg(A,W,H,params);
+    case 'nnsc'
+        [W,H] = nmft_nnsc(A,W,H,params);
     otherwise
         error('Method is not valid.');
 end

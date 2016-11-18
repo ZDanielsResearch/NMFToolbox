@@ -1,7 +1,7 @@
 function [W,H] = nmft_gdcls(A,W,H,params)
 %%Paper:
-% Text Mining using Non-Negative Matrix Factorization
-% V. Pauca, F. Shahnaz, M. Berry, R. Plemmons
+% Non-Negative Sparse Coding
+% P. Hoyer
 %Inputs:
 % A: Data matrix: n x m
 % k: Number of basis elements
@@ -14,7 +14,7 @@ function [W,H] = nmft_gdcls(A,W,H,params)
 if ~isempty(params.loss)
     params.loss = lower(params.loss);
     if ~strcmp(params.loss,'sqeuclidean')
-        error('Loss must be squared Euclidean for gradient descent-constrained least squares.');
+        error('Loss must be squared Euclidean for nonnegative sparse coding.');
     end
 end
 
@@ -31,12 +31,13 @@ for i=1:1:k
 end
 
 for iterationNumber=1:1:params.maxIters
-    H = inv(W'*W + params.paramH.*eye(size(k,k)))*W'*A;
-    H = H .* (H >= 0);
-    W = W .* (A*H') ./ (W*H*H' + 1e-8);
+    [~,~,dW,~,alphaW,~,~] = sqeuclidean_loss(A,W,H,[0 1],[0 0]);
+    W = W - alphaW .* dW;
+    W = W .* (W > 0);
     for i=1:1:k
         W(:,i) = W(:,i) ./ norm(W(:,i),2);
     end
+    H = H .* (W'*A) ./ (W'*W*H + params.paramH);
     if params.printIter
         F = 0;
         if strcmp(params.evalLoss,'sqeuclidean')
