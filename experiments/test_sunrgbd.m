@@ -25,6 +25,8 @@ encoderWeights = log(1 + (numInstances ./ sum(objectList)));
 data = objectList .* repmat(encoderWeights,[numInstances,1]);
 data = data';
 
+data = 100*(rand(100,200) - 0.5);
+
 clear objectList;
 
 params = [];

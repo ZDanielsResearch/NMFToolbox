@@ -64,7 +64,6 @@ if isempty(params.evalLoss)
 end
 
 params.evalLoss = lower(params.evalLoss);
-params.method = lower(params.method);
 
 W = [];
 H = [];
@@ -85,13 +84,10 @@ if sum(sum(A < 0)) == 0
             error('Initialization is not valid.');
     end
 else
-    if ~strcmp(params.method,'convex') && ~strcmp(params.method,'semi')
-        error('Data matrix has negative entries and method is not Convex-NMF or Semi-NMF');
-    end
-    W = zeros(n,k);
-    H = zeros(k,m);
+    
 end
 
+params.method = lower(params.method);
 switch params.method
     case 'als'
         [W,H] = nmft_als(A,W,H,params);

@@ -33,11 +33,9 @@ F = F .* (F > 0);
 
 for iterationNumber = 1:1:params.maxIters;
     B = (A'*A);
-    
-    %%WHATS WRONG???
-    
-    H = H .* (((B.*(B > 0)*F) + (H*F'*B.*(B < 0)*F)) ./ ((B.*(B < 0)*F) + (H*F'*B.*(B > 0)*F) + 1e-8)).^(0.5);
-    F = F .* (((B.*(B > 0)*H) + (B.*(B < 0)*F*H'*H)) ./ ((B.*(B < 0)*H) + (B.*(B > 0)*F*H'*H) + 1e-8)).^(0.5);
+    keyboard;
+    H = H .* (((B.*(B > 0)*F) + (H*F'*B.*(B < 0)*F)) ./ ((B.*(B < 0)*F) + (H*F'*B.*(B > 0)*F))).^(0.5);
+    F = F .* (((B.*(B > 0)*H) + (B.*(B < 0)*F*H'*H)) ./ ((B.*(B < 0)*H) + (B.*(B > 0)*F*H'*H))).^(0.5);
     if params.printIter
         W = A*F;
         if strcmp(params.evalLoss,'sqeuclidean')
