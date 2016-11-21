@@ -22,22 +22,22 @@ end
 
 H = H';
 
-C = kmeans(A',k);
-for i = 1:1:k
-    H(:,i) = double(C == k);
-end
+% C = kmeans(A',k);
+% for i = 1:1:k
+%     H(:,i) = double(C == k);
+% end
 
+H = rand(m,k);
 H = H + 0.2.*ones(m,k);
 F = H*inv(diag(sum(H)));
 F = F .* (F > 0);
 
 for iterationNumber = 1:1:params.maxIters;
     B = (A'*A);
-    
-    %%WHATS WRONG???
-    
-    H = H .* (((B.*(B > 0)*F) + (H*F'*B.*(B < 0)*F)) ./ ((B.*(B < 0)*F) + (H*F'*B.*(B > 0)*F) + 1e-8)).^(0.5);
-    F = F .* (((B.*(B > 0)*H) + (B.*(B < 0)*F*H'*H)) ./ ((B.*(B < 0)*H) + (B.*(B > 0)*F*H'*H) + 1e-8)).^(0.5);
+    Bp = (abs(B)+B)./2;
+    Bn = (abs(B)-B)./2;
+    H = H .* (((Bp*F) + (H*F'*Bn*F)) ./ ((Bn*F) + (H*F'*Bp*F) + 1e-8)).^(0.5);
+    F = F .* (((Bp*H) + (Bn*F*H'*H)) ./ ((Bn*H) + (Bp*F*H'*H) + 1e-8)).^(0.5);
     if params.printIter
         W = A*F;
         if strcmp(params.evalLoss,'sqeuclidean')
