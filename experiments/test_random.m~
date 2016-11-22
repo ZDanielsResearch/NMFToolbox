@@ -2,12 +2,12 @@ setup;
 
 k = 10;
 
-data = 100*generate_data_matrix(2000,150,k,0.01,0);
+data = 100*generate_data_matrix(2000,150,k,0.01,1);
 data = data';
 
 params = [];
-params.method = 'semi';
-params.maxIters = 1000;
+params.method = 'projgrad';
+params.maxIters = 100;
 params.initialization = 'nndsvd';
 params.loss = 'sqeuclidean';
 params.evalLoss = 'sqeuclidean';

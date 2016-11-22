@@ -121,6 +121,8 @@ switch params.method
         [W,H,FIters] = nmft_orthogonal_dtpp(A,W,H,params);
     case 'convex'
         [W,H,F,FIters] = nmft_convex(A,W,H,params);
+    case 'semi'
+        [W,H,FIters] = nmft_semi(A,W,H,params);
     otherwise
         error('Method is not valid.');
 end

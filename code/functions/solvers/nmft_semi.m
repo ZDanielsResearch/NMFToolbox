@@ -1,4 +1,4 @@
-function [W,H,F,FIters] = nmft_convex(A,W,H,params)
+function [W,H,FIters] = nmft_semi(A,W,H,params)
 %%Paper:
 % Convex and Semi-Negative Matrix Factorizations
 % C. Ding, T. Li, M. Jordan
@@ -19,22 +19,27 @@ FIters = [];
 if ~isempty(params.loss)
     params.loss = lower(params.loss);
     if ~strcmp(params.loss,'sqeuclidean')
-        error('Loss must be squared Euclidean for convex nonnegative matrix factorization.');
+        error('Loss must be squared Euclidean for semi-nonnegative matrix factorization.');
     end
 end
 
 H = rand(m,k);
-F = H*inv(diag(sum(H)));
-F = F .* (F > 0);
+W = A*H*inv(H'*H);
 
 for iterationNumber = 1:1:params.maxIters;
-    B = (A'*A);
+    B = (A'*W);
     Bp = (abs(B)+B)./2;
     Bn = (abs(B)-B)./2;
-    H = H .* (((Bp*F) + (H*F'*Bn*F)) ./ ((Bn*F) + (H*F'*Bp*F) + 1e-8)).^(0.5);
-    F = F .* (((Bp*H) + (Bn*F*H'*H)) ./ ((Bn*H) + (Bp*F*H'*H) + 1e-8)).^(0.5);
+    
+    C = (W'*W);
+    Cp = (abs(C)+C)./2;
+    Cn = (abs(C)-C)./2;
+    
+    H = H .* ((Bp + H*Cn) ./ (Bn + H*Cp + 1e-8)).^(0.5);
+    
+    W = A*H*inv(H'*H);
+    
     if params.printIter
-        W = A*F;
         if strcmp(params.evalLoss,'sqeuclidean')
             [F1,~,~,~,~,~,~] = sqeuclidean_loss(A,W,H',[0 0],[0 0]);
         end
@@ -46,4 +51,3 @@ for iterationNumber = 1:1:params.maxIters;
     end
 end
 H = H';
-W = A*F;
