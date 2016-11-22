@@ -1,8 +1,8 @@
-function [W,H,D,F] = nmft(A,k,params)
+function [W,H,D,F,FIters] = nmft(A,k,params)
 %%Inputs:
 % A: Data matrix: n x m
 % k: Number of basis elements
-% params.method: Solver to use: {'als','acls','ahcls','gdcls','mult','projgrad','nnsc','hoyer','orthoChoi','orthoDTPP','convex'}
+% params.method: Solver to use: {'als','acls','ahcls','gdcls','mult','projgrad','projgrad2','nnsc','hoyer','orthoChoi','orthoDTPP','convex'}
 % params.maxIters: Maximum number of iterations to perform
 % params.initialization: How to initialize W and H: {'nndsvd','random','kmeans','svdnmf'}
 % params.loss: Type of divergence to use for training: {'sqeuclidean','kldivergence','itakura-saito','alpha','beta'}
@@ -19,6 +19,8 @@ function [W,H,D,F] = nmft(A,k,params)
 % W: Basis matrix: n x k
 % H: Coefficient matrix: k x m
 % D: Reconstruction error
+% F: Positive convex combination coefficient matrix for convex NMF
+% FIters: Sequence of function values
 
 if isempty(A)
     error('Data matrix is empty.');
@@ -68,6 +70,8 @@ params.method = lower(params.method);
 
 W = [];
 H = [];
+F = [];
+FIters = [];
 
 if sum(sum(A < 0)) == 0
     params.initialization = lower(params.initialization);
@@ -94,27 +98,29 @@ end
 
 switch params.method
     case 'als'
-        [W,H] = nmft_als(A,W,H,params);
+        [W,H,FIters] = nmft_als(A,W,H,params);
     case 'acls'
-        [W,H] = nmft_acls(A,W,H,params);
+        [W,H,FIters] = nmft_acls(A,W,H,params);
     case 'ahcls'
-        [W,H] = nmft_ahcls(A,W,H,params);
+        [W,H,FIters] = nmft_ahcls(A,W,H,params);
     case 'gdcls'
-        [W,H] = nmft_gdcls(A,W,H,params);
+        [W,H,FIters] = nmft_gdcls(A,W,H,params);
     case 'mult'
-        [W,H] = nmft_mult(A,W,H,params);
+        [W,H,FIters] = nmft_mult(A,W,H,params);
     case 'projgrad'
-        [W,H] = nmft_pg(A,W,H,params);
+        [W,H,FIters] = nmft_pg(A,W,H,params,0);
+    case 'projgrad2'
+        [W,H,FIters] = nmft_pg(A,W,H,params,1);
     case 'nnsc'
-        [W,H] = nmft_nnsc(A,W,H,params);
+        [W,H,FIters] = nmft_nnsc(A,W,H,params);
     case 'hoyer'
-        [W,H] = nmft_hoyer(A,W,H,params);
+        [W,H,FIters] = nmft_hoyer(A,W,H,params);
     case 'orthochoi'
-        [W,H] = nmft_orthogonal_choi(A,W,H,params);
+        [W,H,FIters] = nmft_orthogonal_choi(A,W,H,params);
     case 'orthodtpp'
-        [W,H] = nmft_orthogonal_dtpp(A,W,H,params);
+        [W,H,FIters] = nmft_orthogonal_dtpp(A,W,H,params);
     case 'convex'
-        [W,H,F] = nmft_convex(A,W,H,params);
+        [W,H,F,FIters] = nmft_convex(A,W,H,params);
     otherwise
         error('Method is not valid.');
 end

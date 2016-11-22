@@ -14,5 +14,6 @@ addpath([codePath 'functions/rank_approximation/']);
 addpath([codePath 'functions/initialization/']);
 addpath([codePath 'functions/losses/']);
 addpath([codePath 'functions/projections/']);
+addpath([codePath 'functions/test/']);
 addpath(experimentsPath);
 addpath(dataPath);

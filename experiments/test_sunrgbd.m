@@ -5,8 +5,7 @@ load('data/sunrgbd_information.mat');
 [numInstances,numObjects] = size(objectList);
 
 %Parameters
-numBasisElements = 50;
-maxIters = 200;
+numBasisElements = 15;
 
 %Print and plot statistics
 disp(['The number of instances is ' num2str(numInstances)]);
@@ -25,23 +24,5 @@ encoderWeights = log(1 + (numInstances ./ sum(objectList)));
 data = objectList .* repmat(encoderWeights,[numInstances,1]);
 data = data';
 
-data = 100*(rand(100,200) - 0.5);
-
 clear objectList;
 
-params = [];
-params.method = 'convex';
-params.maxIters = 100;
-params.initialization = 'nndsvd';
-params.loss = 'sqeuclidean';
-params.evalLoss = 'sqeuclidean';
-params.stepType = 'steepest';
-params.paramH = 0.5;
-params.paramW = 0.5;
-params.sparseParamH = 0.75;
-params.sparseParamW = 0.75;
-params.subIters = 1;
-params.printIter = true;
-params.orthogonalConstraint = 'w';
-
-[W,H,D,F] = nmft(data,numBasisElements,params);

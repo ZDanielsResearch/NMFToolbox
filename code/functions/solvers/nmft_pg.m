@@ -1,4 +1,4 @@
-function [W,H] = nmft_pg(A,W,H,params)
+function [W,H,FIters] = nmft_pg(A,W,H,params,pgd2Flag)
 %%Papers:
 % Projected Gradient Methods for Nonnegative Matrix Factorization
 % C.-J. Lin
@@ -11,9 +11,13 @@ function [W,H] = nmft_pg(A,W,H,params)
 % params.maxIters: Maximum number of iterations to perform
 % params.stepType: How to compute step: {'steepest','newton','bfgs'}
 % params.subIters: Number of subiterations to perform
+% pgd2Flag: Instead of solving and then projecting, simultaneously solve and project
 %Outputs
 % W: Basis matrix: n x k
 % H: Coefficient matrix: k x m
+% FIters: Sequence of function values
+
+FIters = [];
 
 if ~isempty(params.loss)
     params.loss = lower(params.loss);
@@ -48,19 +52,34 @@ end
 [n,k] = size(W);
 [~,m] = size(H);
 
+prevH = H;
+prevW = W;
+invHessH = eye(k,k);
+invHessW = eye(k,k);
+
 for iterationNumber = 1:1:params.maxIters
     switch params.stepType
         case 'steepest'
             for subIteration = 1:1:params.subIters
                 [~,dH,~,alphaH,~,~,~] = sqeuclidean_loss(A,W,H,[1 0],[0 0]);
                 H = H - alphaH .* dH;
+                if pgd2Flag
+                    H = H .* (H > 0);
+                end
             end
-            H = H .* (H > 0);
+            if ~pgd2Flag
+                H = H .* (H > 0);
+            end
             for subIteration = 1:1:params.subIters
                 [~,~,dW,~,alphaW,~,~] = sqeuclidean_loss(A,W,H,[0 1],[0 0]);
                 W = W - alphaW .* dW;
+                if pgd2Flag
+                    W = W .* (W > 0);
+                end
             end
-            W = W .* (W > 0);
+            if ~pgd2Flag
+                W = W .* (W > 0);
+            end
         case 'newton'
             [~,dH,~,~,~,alphaH,~] = sqeuclidean_loss(A,W,H,[1 0],[1 0]);
             H = H - inv(alphaH) * dH;
@@ -69,7 +88,10 @@ for iterationNumber = 1:1:params.maxIters
             W = W - dW * inv(alphaW);
             W = W .* (W > 0);
         case 'bfgs'
-            invHessH = eye(k,k);
+            prevH = H;
+            if norm(W - prevW,'fro') ./ norm(W,'fro') > 0.05
+                invHessH = eye(k,k);
+            end
             [F1,dH,~,~,~,~,~] = sqeuclidean_loss(A,W,H,[1 0],[0 0]);
             for subIteration = 1:1:params.subIters
                 alphaH = 1;
@@ -102,7 +124,10 @@ for iterationNumber = 1:1:params.maxIters
             end
             H = H .* (H > 0);
             
-            invHessW = eye(k,k);
+            prevW = W;
+            if norm(H - prevH,'fro') ./ norm(H,'fro') > 0.05
+                invHessW = eye(k,k);
+            end
             [F1,~,dW,~,~,~,~] = sqeuclidean_loss(A,W,H,[0 1],[0 0]);
             for subIteration = 1:1:params.subIters
                 alphaW = 1;
@@ -127,7 +152,7 @@ for iterationNumber = 1:1:params.maxIters
                     break;
                 end
                 S = W - W1;
-                [F1,~,dW,~,~,~,d2W] = sqeuclidean_loss(A,W,H,[0 1],[0 0]);
+                [F1,~,dW,~,~,~,~] = sqeuclidean_loss(A,W,H,[0 1],[0 0]);
                 Y = dW - dW1;
                 rho = 1 ./ (Y(:)'*S(:));
                 scaleMat = eye(k,k) - rho .* S'*Y;
@@ -145,6 +170,7 @@ for iterationNumber = 1:1:params.maxIters
         if strcmp(params.evalLoss,'kldivergence')
             F = kl_loss(A,W,H);
         end
+        FIters = [FIters; F];
         disp(['Iteration #' num2str(iterationNumber) ', Function Value: ' num2str(F)]);
     end
 end

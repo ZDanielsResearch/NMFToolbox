@@ -1,4 +1,4 @@
-function [W,H] = nmft_gdcls(A,W,H,params)
+function [W,H,FIters] = nmft_gdcls(A,W,H,params)
 %%Paper:
 % Non-Negative Sparse Coding
 % P. Hoyer
@@ -10,6 +10,9 @@ function [W,H] = nmft_gdcls(A,W,H,params)
 %Outputs
 % W: Basis matrix: n x k
 % H: Coefficient matrix: k x m
+% FIters: Sequence of function values
+
+FIters = [];
 
 if ~isempty(params.loss)
     params.loss = lower(params.loss);
@@ -46,6 +49,7 @@ for iterationNumber=1:1:params.maxIters
         if strcmp(params.evalLoss,'kldivergence')
             F = kl_loss(A,W,H);
         end
+        FIters = [FIters; F];
         disp(['Iteration #' num2str(iterationNumber) ', Function Value: ' num2str(F)]);
     end
 end

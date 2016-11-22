@@ -1,4 +1,4 @@
-function [W,H,F] = nmft_convex(A,W,H,params)
+function [W,H,F,FIters] = nmft_convex(A,W,H,params)
 %%Paper:
 % Convex and Semi-Negative Matrix Factorizations
 % C. Ding, T. Li, M. Jordan
@@ -9,6 +9,9 @@ function [W,H,F] = nmft_convex(A,W,H,params)
 %Outputs
 % W: Basis matrix: n x k
 % H: Coefficient matrix: k x m
+% FIters: Sequence of function values
+
+FIters = [];
 
 [n,k] = size(W);
 [~,m] = size(H);
@@ -20,15 +23,7 @@ if ~isempty(params.loss)
     end
 end
 
-H = H';
-
-% C = kmeans(A',k);
-% for i = 1:1:k
-%     H(:,i) = double(C == k);
-% end
-
 H = rand(m,k);
-H = H + 0.2.*ones(m,k);
 F = H*inv(diag(sum(H)));
 F = F .* (F > 0);
 
@@ -46,6 +41,7 @@ for iterationNumber = 1:1:params.maxIters;
         if strcmp(params.evalLoss,'kldivergence')
             F1 = kl_loss(A,W,H');
         end
+        FIters = [FIters; F];
         disp(['Iteration #' num2str(iterationNumber) ', Function Value: ' num2str(F1)]);
     end
 end
