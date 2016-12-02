@@ -46,4 +46,5 @@ for iterationNumber = 1:1:params.maxIters;
     end
 end
 H = H';
+[F,H] = normalize(F,H,1);
 W = A*F;

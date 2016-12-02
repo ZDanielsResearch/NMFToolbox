@@ -15,5 +15,6 @@ addpath([codePath 'functions/initialization/']);
 addpath([codePath 'functions/losses/']);
 addpath([codePath 'functions/projections/']);
 addpath([codePath 'functions/test/']);
+addpath([codePath 'functions/helper/']);
 addpath(experimentsPath);
 addpath(dataPath);

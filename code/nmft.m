@@ -2,7 +2,7 @@ function [W,H,D,F,FIters] = nmft(A,k,params)
 %%Inputs:
 % A: Data matrix: n x m
 % k: Number of basis elements
-% params.method: Solver to use: {'als','acls','ahcls','gdcls','mult','projgrad','projgrad2','nnsc','hoyer','orthoChoi','orthoDTPP','convex'}
+% params.method: Solver to use: {'als','acls','ahcls','gdcls','mult','projgrad','projgrad2','nnsc','hoyer','orthoChoi','orthoDTPP','convex','augmented'}
 % params.maxIters: Maximum number of iterations to perform
 % params.initialization: How to initialize W and H: {'nndsvd','random','kmeans','svdnmf'}
 % params.loss: Type of divergence to use for training: {'sqeuclidean','kldivergence','itakura-saito','alpha','beta'}
@@ -123,6 +123,8 @@ switch params.method
         [W,H,F,FIters] = nmft_convex(A,W,H,params);
     case 'semi'
         [W,H,FIters] = nmft_semi(A,W,H,params);
+    case 'augmented'
+        [W,H,FIters] = nmft_augmented(A,W,H,params);
     otherwise
         error('Method is not valid.');
 end
