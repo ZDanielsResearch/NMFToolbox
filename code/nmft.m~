@@ -2,12 +2,12 @@ function [W,H,D,F,FIters] = nmft(A,k,params)
 %%Inputs:
 % A: Data matrix: n x m
 % k: Number of basis elements
-% params.method: Solver to use: {'als','acls','ahcls','gdcls','mult','projgrad','projgrad2','nnsc','hoyer','orthoChoi','orthoDTPP','convex','augmented','linear'}
+% params.method: Solver to use: {'als','acls','ahcls','gdcls','mult','projgrad','projgrad2','nnsc','hoyer','orthoChoi','orthoDTPP','convex','augmented','linear','online','online2'}
 % params.maxIters: Maximum number of iterations to perform
 % params.initialization: How to initialize W and H: {'nndsvd','random','kmeans','svdnmf'}
 % params.loss: Type of divergence to use for training: {'sqeuclidean','kldivergence','itakura-saito','alpha','beta'}
 % params.evalLoss: Type of divergence to use for evaluation: {'sqeuclidean','kldivergence','itakura-saito','alpha','beta'}
-% params.stepType: How to compute step: {'steepest','newton','bfgs'}
+% params.stepType: How to compute step: {'steepest','newton','bfgs',}
 % params.paramH: parameter associated with H: Differs from algorithm to algorithm
 % params.paramW: parameter associated with W: Differs from algorithm to algorithm
 % params.sparseParamH: parameter for Hoyer sparsity associated with H
@@ -15,6 +15,7 @@ function [W,H,D,F,FIters] = nmft(A,k,params)
 % params.orthogonalConstraint: Enforce orthogonality in {'w','h'} for Choi algorithm
 % params.subIters: Number of subiterations to perform
 % params.printIter: Flag to print function value after each iteration: {true,false}
+% params.sample: Percent of data points to sample
 %Outputs
 % W: Basis matrix: n x k
 % H: Coefficient matrix: k x m
@@ -125,6 +126,12 @@ switch params.method
         [W,H,FIters] = nmft_semi(A,W,H,params);
     case 'augmented'
         [W,H,FIters] = nmft_augmented(A,W,H,params);
+    case 'linear'
+        [W,H,FIters] = nmft_linear_2(A,W,H,params);
+    case 'online'
+        [W,H,FIters] = nmft_online(A,W,H,params,0);
+    case 'online2'
+        [W,H,FIters] = nmft_online(A,W,H,params,1);
     otherwise
         error('Method is not valid.');
 end

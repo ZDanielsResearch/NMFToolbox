@@ -90,6 +90,20 @@ for iterationNumber = 1:1:params.maxIters
             if ~pgd2Flag
                 W = W .* (W > 0);
             end
+        case 'mixed'
+            [~,dH,~,~,~,alphaH,~] = sqeuclidean_loss(A2,W,H2,[1 0],[1 0]);
+            H2 = H2 - inv(alphaH) * dH;
+            H2 = H2 .* (H2 > 0);
+            for subIteration = 1:1:params.subIters
+                [~,~,dW,~,alphaW,~,~] = sqeuclidean_loss(A2,W,H2,[0 1],[0 0]);
+                W = W - alphaW .* dW;
+                if pgd2Flag
+                    W = W .* (W > 0);
+                end
+            end
+            if ~pgd2Flag
+                W = W .* (W > 0);
+            end
         case 'newton'
             [~,dH,~,~,~,alphaH,~] = sqeuclidean_loss(A2,W,H2,[1 0],[1 0]);
             H2 = H2 - inv(alphaH) * dH;
