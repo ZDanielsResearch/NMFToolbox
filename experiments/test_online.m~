@@ -1,0 +1,79 @@
+% setup;
+% 
+% k = 20;
+% 
+% data = 100*generate_data_matrix(20000,500,k,0.15,1);
+% data = data';
+
+FItersAll = zeros(50,4);
+
+params = [];
+params.method = 'online';
+params.maxIters = 50;
+params.initialization = 'nndsvd';
+params.loss = 'sqeuclidean';
+params.evalLoss = 'sqeuclidean';
+params.stepType = 'steepest';
+params.paramH = 0.5;
+params.paramW = 0.5;
+params.sparseParamH = 0.75;
+params.sparseParamW = 0.75;
+params.subIters = 1;
+params.printIter = true;
+params.orthogonalConstraint = 'w';
+params.sample = 0.1;
+
+[W,H,D,F,FIters] = nmft(data,k,params);
+FItersAll(:,1) = FIters';
+
+params = [];
+params.method = 'online';
+params.maxIters = 50;
+params.initialization = 'nndsvd';
+params.loss = 'sqeuclidean';
+params.evalLoss = 'sqeuclidean';
+params.stepType = 'newton';
+params.paramH = 0.5;
+params.paramW = 0.5;
+params.sparseParamH = 0.75;
+params.sparseParamW = 0.75;
+params.subIters = 1;
+params.printIter = true;
+params.orthogonalConstraint = 'w';
+params.sample = 0.1;
+
+[W,H,D,F,FIters] = nmft(data,k,params);
+FItersAll(:,2) = FIters';
+
+params = [];
+params.method = 'projgrad';
+params.maxIters = 50;
+params.initialization = 'nndsvd';
+params.loss = 'sqeuclidean';
+params.evalLoss = 'sqeuclidean';
+params.stepType = 'steepest';
+params.paramH = 0.5;
+params.paramW = 0.5;
+params.sparseParamH = 0.75;
+params.sparseParamW = 0.75;
+params.subIters = 1;
+params.printIter = true;
+params.orthogonalConstraint = 'w';
+params.sample = 0.1;
+
+[W,H,D,F,FIters] = nmft(data,k,params);
+FItersAll(:,3) = FIters';
+
+labels = {'online-pg','online-als','projgrad','als'};
+colors = {'red','green','blue','black'};
+
+scale = max(max(FItersAll)) ./ 8;
+
+close all;
+figure;
+hold on;
+for i = 1:1:3
+    plot(FItersAll(:,i),'Color',colors{i})
+    text(8,scale*i,labels{i},'Color',colors{i})
+end
+hold off;

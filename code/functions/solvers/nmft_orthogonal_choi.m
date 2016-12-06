@@ -13,6 +13,16 @@ function [W,H,FIters] = nmft_orthogonal_choi(A,W,H,params)
 % FIters: Sequence of function values
 
 FIters = [];
+if params.printIter
+    if strcmp(params.evalLoss,'sqeuclidean')
+        [F,~,~,~,~,~,~] = sqeuclidean_loss(A,W,H2,[0 0],[0 0]);
+    end
+    if strcmp(params.evalLoss,'kldivergence')
+        F = kl_loss(A,W,H3);
+    end
+    FIters = [FIters; F];
+    disp(['Iteration #' num2str(0) ', Function Value: ' num2str(F)]);
+end
 
 [n,k] = size(W);
 [~,m] = size(H);

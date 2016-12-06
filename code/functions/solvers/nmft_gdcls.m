@@ -13,6 +13,16 @@ function [W,H,FIters] = nmft_gdcls(A,W,H,params)
 % FIters: Sequence of function values
 
 FIters = [];
+if params.printIter
+    if strcmp(params.evalLoss,'sqeuclidean')
+        [F,~,~,~,~,~,~] = sqeuclidean_loss(A,W,H,[0 0],[0 0]);
+    end
+    if strcmp(params.evalLoss,'kldivergence')
+        F = kl_loss(A,W,H);
+    end
+    FIters = [FIters; F];
+    disp(['Iteration #' num2str(0) ', Function Value: ' num2str(F)]);
+end
 
 if ~isempty(params.loss)
     params.loss = lower(params.loss);

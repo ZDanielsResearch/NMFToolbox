@@ -7,7 +7,7 @@ data = data';
 
 params = [];
 params.method = 'linear';
-params.maxIters = 500;
+params.maxIters = 200;
 params.initialization = 'nndsvd';
 params.loss = 'sqeuclidean';
 params.evalLoss = 'sqeuclidean';
@@ -21,8 +21,6 @@ params.printIter = true;
 params.orthogonalConstraint = 'w';
 
 [W,H,D,F,FIters] = nmft(data,k,params);
-
-D
 
 %%%%%%
 
@@ -42,9 +40,6 @@ params.printIter = true;
 params.orthogonalConstraint = 'w';
 
 [W,H,D,F,FIters] = nmft(data,k,params);
-
-D
-
 % FItersAll = zeros(10,7);
 % FItersAll(:,1) = FIters';
 % 

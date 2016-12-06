@@ -18,6 +18,7 @@ for i = 1:1:rankVal
 end
 
 for i = rankVal+1:1:rows
+    i
     x = zeros(1,cols);
     continueFlag = true;
     while continueFlag
