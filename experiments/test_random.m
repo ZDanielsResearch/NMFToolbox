@@ -2,12 +2,12 @@ setup;
 
 k = 10;
 
-data = 100*generate_data_matrix(100,100,k,0.05,1);
+data = generate_data_matrix(100,100,k,0.05,1,100);
 data = data';
 
 params = [];
 params.method = 'linear';
-params.maxIters = 500;
+params.maxIters = 50;
 params.initialization = 'nndsvd';
 params.loss = 'sqeuclidean';
 params.evalLoss = 'sqeuclidean';

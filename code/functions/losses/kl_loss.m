@@ -13,6 +13,6 @@ function F = kl_loss(A,W,H)
 [~,m] = size(H);
 
 R = W*H + 1e-8;
-F = sum(sum(A.*log(A ./ R))) + log(sum(sum(R)));
+F = sum(sum(A.*log(A ./ R))) - sum(sum(A)) + log(sum(sum(R)));
 
 end

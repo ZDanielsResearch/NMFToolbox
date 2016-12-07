@@ -1,8 +1,8 @@
 setup;
 
-k = 5;
+k = 15;
 
-data = 100*generate_data_matrix(2000,50,k,0.15,1);
+[data,trueW,trueH] = generate_data_matrix(200000,500,k,0.1,1,100);
 data = data';
 
 FItersAll = zeros(51,5);
@@ -110,7 +110,7 @@ scale = max(max(FItersAll)) ./ 8;
 close all;
 figure;
 hold on;
-for i = 1:1:5
+for i = 1:1:2
     plot(FItersAll(2:51,i),'Color',colors{i})
     text(8,scale*i,labels{i},'Color',colors{i})
 end

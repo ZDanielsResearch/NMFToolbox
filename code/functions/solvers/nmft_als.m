@@ -31,10 +31,12 @@ if ~isempty(params.loss)
 end
 
 for iterationNumber = 1:1:params.maxIters
+    WOld = W;
+    HOld = H;
     H = inv(W'*W)*W'*A;
-    H = H .* (H >= 0);
+    H = H .* double(H >= 0);
     W = A*H'*inv(H*H');
-    W = W .* (W >= 0);
+    W = W .* double(W >= 0);
     if params.printIter
         F = 0;
         if strcmp(params.evalLoss,'sqeuclidean')
